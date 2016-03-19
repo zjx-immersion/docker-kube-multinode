@@ -132,7 +132,7 @@ start_k8s() {
         --net=host \
         --privileged \
         -v /dev/net:/dev/net \
-        quay.io/coreos/flannel:${FLANNEL_VERSION} \
+        index.tenxcloud.com/zhongjianxin/flannel:${FLANNEL_VERSION} \
         /opt/bin/flanneld \
             --ip-masq="${FLANNEL_IPMASQ}" \
             --etcd-endpoints=http://${MASTER_IP}:4001 \
@@ -187,26 +187,26 @@ start_k8s() {
     # Start kubelet & proxy in container
     # TODO: Use secure port for communication
     docker run \
+        --volume=/:/rootfs:ro \
+        --volume=/sys:/sys:ro \
+        --volume=/dev:/dev \
+        --volume=/var/lib/docker/:/var/lib/docker:rw \
+        --volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
+        --volume=/var/run:/var/run:rw \
         --net=host \
+        --privileged=true \
         --pid=host \
-        --privileged \
-        --restart=on-failure \
         -d \
-        -v /sys:/sys:ro \
-        -v /var/run:/var/run:rw  \
-        -v /:/rootfs:ro \
-        -v /var/lib/docker/:/var/lib/docker:rw \
-        -v /var/lib/kubelet/:/var/lib/kubelet:rw \
-        index.tenxcloud.com/zhongjianxin/hyperkube-${ARCH}:v${K8S_VERSION} \
-        /hyperkube kubelet \
-            --allow-privileged=true \
-            --api-servers=http://${MASTER_IP}:8080 \
-            --address=0.0.0.0 \
-            --enable-server \
-            --cluster-dns=10.0.0.10 \
-            --cluster-domain=cluster.local \
-            --containerized \
-            --v=2
+    index.tenxcloud.com/zhongjianxin/hyperkube-amd64:v${K8S_VERSION} \
+    /hyperkube kubelet \
+        --allow-privileged=true \
+        --api-servers=http://${MASTER_IP}:8080 \
+        --v=2 \
+        --address=0.0.0.0 \
+        --enable-server \
+        --containerized \
+        --cluster-dns=10.0.0.10 \
+        --cluster-domain=cluster.local
 
     docker run \
         -d \
