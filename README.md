@@ -10,4 +10,4 @@
 
 >export FLANNEL_IPMASQ=true
 
->export MASTER_IP= [your master node I]
+>export MASTER_IP= [your master node IP]
