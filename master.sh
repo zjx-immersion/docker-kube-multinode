@@ -133,7 +133,7 @@ start_k8s(){
         --restart=on-failure \
         --net=host \
         -d \
-        gcr.io/google_containers/etcd-${ARCH}:${ETCD_VERSION} \
+        index.tenxcloud.com/zhongjianxin/etcd-${ARCH}:${ETCD_VERSION} \
         /usr/local/bin/etcd \
             --listen-client-urls=http://127.0.0.1:4001,http://${MASTER_IP}:4001 \
             --advertise-client-urls=http://${MASTER_IP}:4001 \
@@ -142,7 +142,7 @@ start_k8s(){
     sleep 5
     # Set flannel net config
     docker -H unix:///var/run/docker-bootstrap.sock run \
-        --net=host gcr.io/google_containers/etcd:${ETCD_VERSION} \
+        --net=host index.tenxcloud.com/zhongjianxin/etcd:${ETCD_VERSION} \
         etcdctl \
         set /coreos.com/network/config \
             '{ "Network": "10.1.0.0/16", "Backend": {"Type": "vxlan"}}'
@@ -154,7 +154,7 @@ start_k8s(){
         --net=host \
         --privileged \
         -v /dev/net:/dev/net \
-        quay.io/coreos/flannel:${FLANNEL_VERSION} \
+        index.tenxcloud.com/zhongjianxin/flannel:${FLANNEL_VERSION} \
         /opt/bin/flanneld \
             --ip-masq="${FLANNEL_IPMASQ}" \
             --iface="${FLANNEL_IFACE}")
@@ -217,7 +217,7 @@ start_k8s(){
         -v /:/rootfs:ro \
         -v /var/lib/docker/:/var/lib/docker:rw \
         -v /var/lib/kubelet/:/var/lib/kubelet:rw \
-        gcr.io/google_containers/hyperkube-${ARCH}:v${K8S_VERSION} \
+        index.tenxcloud.com/zhongjianxin/hyperkube-${ARCH}:v${K8S_VERSION} \
         /hyperkube kubelet \
             --address=0.0.0.0 \
             --allow-privileged=true \

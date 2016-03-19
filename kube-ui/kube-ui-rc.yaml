@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: kube-ui
-        image: gcr.io/google_containers/kube-ui:v4
+        image: index.tenxcloud.com/zhongjianxin/kube-ui:v4
         resources:
           limits:
             cpu: 100m
