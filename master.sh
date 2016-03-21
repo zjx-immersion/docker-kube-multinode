@@ -222,7 +222,7 @@ start_k8s(){
             --address=0.0.0.0 \
             --allow-privileged=true \
             --enable-server \
-            --api-servers=http://localhost:8080 \
+            --api-servers=http://localhost:8000 \
             --config=/etc/kubernetes/manifests-multi \
             --cluster-dns=10.0.0.10 \
             --cluster-domain=cluster.local \

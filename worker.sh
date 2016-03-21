@@ -200,7 +200,7 @@ start_k8s() {
     index.tenxcloud.com/zhongjianxin/hyperkube-amd64:v${K8S_VERSION} \
     /hyperkube kubelet \
         --allow-privileged=true \
-        --api-servers=http://${MASTER_IP}:8080 \
+        --api-servers=http://${MASTER_IP}:8000 \
         --v=2 \
         --address=0.0.0.0 \
         --enable-server \
@@ -215,7 +215,7 @@ start_k8s() {
         --restart=on-failure \
         index.tenxcloud.com/zhongjianxin/hyperkube-${ARCH}:v${K8S_VERSION} \
         /hyperkube proxy \
-            --master=http://${MASTER_IP}:8080 \
+            --master=http://${MASTER_IP}:8000 \
             --v=2
 }
 
