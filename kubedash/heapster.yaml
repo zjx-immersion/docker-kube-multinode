@@ -1,0 +1,50 @@
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: heapster-v12
+  namespace: kube-system
+  labels:
+    k8s-app: heapster
+    version: v12
+    kubernetes.io/cluster-service: "true"
+spec:
+  replicas: 1
+  selector:
+    k8s-app: heapster
+    version: v12
+  template:
+    metadata:
+      labels:
+        k8s-app: heapster
+        version: v12
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+        - image: gcr.io/google_containers/heapster:v0.18.0
+          name: heapster
+          resources:
+            limits:
+              cpu: 100m
+              memory: 300Mi
+          command:
+            - /heapster
+            - --source=kubernetes:http://10.0.0.50:8080?inClusterConfig=false&kubeletHttps=true&useServiceAccount=true&auth=
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: heapster
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "Heapster"
+spec: 
+  ports: 
+    - port: 80
+      targetPort: 8082
+  selector: 
+    k8s-app: heapster
